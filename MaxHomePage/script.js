@@ -37,15 +37,10 @@ function showContent(type) {
         message.textContent = `idea區域。\n第１個『idea』：您可以點第１個框，那個框裡面寫著：word search，看它的內容，去做做看吧。\n第２個『idea』：您可以點第２個框，那個框裡面寫著：解說，您也可看一看裡面寫了什麼？\n第３個『idea』：您可以點第３個框，也就是現在在的這個圖面上，您也可以照著這些提示去做。\n第４個『idea』：您可以點第４個框，那個框裡面寫著：試玩，您可以玩裡面的 word search 遊戲。`;
         message.style.whiteSpace = "pre-line";
         content.appendChild(message);
-    } else if (type ==="做做看") {
-        const message = document.createElement("p");
-        message.textContent = `做做看區域。\n題目一：請問這個網站的標題叫什麼名字？\n題目二：請問這個網站裡的按鈕數跟字有多少？相差多少？`;
-        message.style.whiteSpace = "pre-line";
-        content.appendChild(message);
     } else {
-        // 顯示其他內容
+        // 顯示其他內容 (訂閱)
         const message = document.createElement("p");
-        message.textContent = `Word search 區域，它是這個網站裡面唯一的好玩遊戲，它叫做：word search，它可以幫助您的意志力變強。`;
+        message.textContent = `訂閱者名單：\n`;
         content.appendChild(message);
     }
 }
