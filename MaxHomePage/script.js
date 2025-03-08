@@ -44,12 +44,13 @@ function showContent(type) {
         resetGame(); // 初始化遊戲
     } else {
         // 顯示其他內容 (訂閱)
+        const addsubscriber = document.createElement("div");
+        addsubscriber.innerHTML = `
         <button onclick="openPrompt()">新增訂閱者</button>
         <div id="subscriber-list">
             <h3>訂閱者清單</h3>
             <ul id="name-list"></ul>
         </div>
-        
         <div id="input-section">
             <h3>輸入文字並加入表格</h3>
             <input type="text" id="textInput" placeholder="輸入內容">
@@ -60,6 +61,7 @@ function showContent(type) {
                 </tr>
             </table>
         </div>
+        `;       
     }
 }
 
