@@ -13,7 +13,7 @@ function showContent(type) {
     const content = document.getElementById("content");
     content.innerHTML = ""; // 清空右側內容
 
-    if (type === "Word Search") {
+    if (type === "WordSearch") {
         const message = document.createElement("p");
         message.textContent = `Word search 區域，它是這個網站裡面唯一的好玩遊戲，它叫做：word search，它可以幫助您的意志力變強。`;
         message.style.whiteSpace = "pre-line";
