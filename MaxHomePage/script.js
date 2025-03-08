@@ -13,7 +13,22 @@ function showContent(type) {
     const content = document.getElementById("content");
     content.innerHTML = ""; // 清空右側內容
 
-    if (type === "試玩") {
+    if (type === "word-search") {
+        const message = document.createElement("p");
+        message.textContent = `Word search 區域，它是這個網站裡面唯一的好玩遊戲，它叫做：word search，它可以幫助您的意志力變強。`;
+        message.style.whiteSpace = "pre-line";
+        content.appendChild(message);
+    } else if (type === "Idea") {
+        const message = document.createElement("p");
+        message.textContent = `idea區域。\n第１個『idea』：您可以點第１個框，那個框裡面寫著：word search，看它的內容，去做做看吧。\n第２個『idea』：您可以點第２個框，那個框裡面寫著：解說，您也可看一看裡面寫了什麼？\n第３個『idea』：您可以點第３個框，也就是現在在的這個圖面上，您也可以照著這些提示去做。\n第４個『idea』：您可以點第４個框，那個框裡面寫著：試玩，您可以玩裡面的 word search 遊戲。`;
+        message.style.whiteSpace = "pre-line";
+        content.appendChild(message);
+    } else if (type === "解說") {
+        const message = document.createElement("p");
+        message.textContent = `解說區域。\n『解說』１：word search, 請點下 word search 框紀錄ㄧ下您玩到的地方吧！\n『解說』２：先告訴您，試玩框裡面的遊戲只是試玩的，但是它有♾️關。`;
+        message.style.whiteSpace = "pre-line";
+        content.appendChild(message);
+    } else if (type === "試玩") {
         // 加載遊戲界面
         const gameContainer = document.createElement("div");
         gameContainer.innerHTML = `
@@ -27,16 +42,6 @@ function showContent(type) {
         `;
         content.appendChild(gameContainer);
         resetGame(); // 初始化遊戲
-    } else if (type === "解說") {
-        const message = document.createElement("p");
-        message.textContent = `解說區域。\n『解說』１：word search, 請點下 word search 框紀錄ㄧ下您玩到的地方吧！\n『解說』２：先告訴您，試玩框裡面的遊戲只是試玩的，但是它有♾️關。`;
-        message.style.whiteSpace = "pre-line";
-        content.appendChild(message);
-    } else if (type === "Idea") {
-        const message = document.createElement("p");
-        message.textContent = `idea區域。\n第１個『idea』：您可以點第１個框，那個框裡面寫著：word search，看它的內容，去做做看吧。\n第２個『idea』：您可以點第２個框，那個框裡面寫著：解說，您也可看一看裡面寫了什麼？\n第３個『idea』：您可以點第３個框，也就是現在在的這個圖面上，您也可以照著這些提示去做。\n第４個『idea』：您可以點第４個框，那個框裡面寫著：試玩，您可以玩裡面的 word search 遊戲。`;
-        message.style.whiteSpace = "pre-line";
-        content.appendChild(message);
     } else {
         // 顯示其他內容 (訂閱)
         const message = document.createElement("p");
