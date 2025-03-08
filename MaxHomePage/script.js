@@ -47,19 +47,10 @@ function showContent(type) {
         const addsubscriber = document.createElement("div");
         addsubscriber.innerHTML = `
         <button onclick="openPrompt()">新增訂閱者</button>
+	<button onclick="openPrompt2()">取消訂閱者</button>
         <div id="subscriber-list">
             <h3>訂閱者清單</h3>
             <ul id="name-list"></ul>
-        </div>
-        <div id="input-section">
-            <h3>輸入文字並加入表格</h3>
-            <input type="text" id="textInput" placeholder="輸入內容">
-            <button onclick="addToTable()">新增</button>
-            <table id="dataTable">
-                <tr>
-                    <th>內容</th>
-                </tr>
-            </table>
         </div>
         `;
         content.appendChild(addsubscriber);
@@ -73,19 +64,69 @@ function openPrompt() {
         let listItem = document.createElement("li");
         listItem.textContent = name;
         list.appendChild(listItem);
+        saveSubscribers();
     }
 }
 
-function addToTable() {
-    let input = document.getElementById("textInput").value;
-    if (input.trim() !== "") {
-        let table = document.getElementById("dataTable");
-        let newRow = table.insertRow();
-        let newCell = newRow.insertCell(0);
-        newCell.textContent = input;
-        document.getElementById("textInput").value = ""; 
+function openPrompt2() {
+    let nameToDelete = prompt("請輸入要刪除的訂閱者姓名：");
+    if (!nameToDelete || nameToDelete.trim() === "") return;
+
+    let list = document.getElementById("name-list");
+    let items = list.getElementsByTagName("li");
+    let found = false;
+
+    for (let i = 0; i < items.length; i++) {
+        if (items[i].textContent === nameToDelete) {
+            items[i].remove();
+            found = true;
+            break;
+        }
+    }
+
+    if (found) {
+        saveSubscribers();
+        alert(`已刪除 ${nameToDelete}`);
+    } else {
+        alert(`找不到 ${nameToDelete}`);
     }
 }
+
+
+
+function saveSubscribers() {
+    let names = [];
+    document.querySelectorAll("#name-list li").forEach(li => names.push(li.textContent));
+    
+    console.log("準備存入 localStorage 的訂閱者名單:", names);
+    localStorage.setItem("subscribers", JSON.stringify(names));
+
+    // 確認 localStorage 內的數據是否已經正確存入
+    console.log("存入後 localStorage.getItem('subscribers'):", localStorage.getItem("subscribers"));
+}
+
+
+function loadData() {
+    console.log("開始執行 loadData()...");
+    let checkExist = setInterval(() => {
+        let nameList = document.getElementById("name-list");
+        if (nameList) {
+            clearInterval(checkExist); // 停止檢查
+            console.log("成功找到 #name-list，開始載入資料");
+
+            let savedNames = JSON.parse(localStorage.getItem("subscribers")) || [];
+            console.log("載入的訂閱者名單:", savedNames);
+
+            savedNames.forEach(name => {
+                console.log("新增訂閱者:", name);
+                let listItem = document.createElement("li");
+                listItem.textContent = name;
+                nameList.appendChild(listItem);
+            });
+        }
+    }, 100); // 每 100 毫秒檢查一次，直到找到 #name-list
+}
+document.addEventListener("DOMContentLoaded", loadData);
 
 function generateMatrixWithWords(rows, cols, words) {
     const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
