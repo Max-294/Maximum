@@ -44,9 +44,22 @@ function showContent(type) {
         resetGame(); // 初始化遊戲
     } else {
         // 顯示其他內容 (訂閱)
-        const message = document.createElement("p");
-        message.textContent = `訂閱者名單：\n\n`;
-        content.appendChild(message);
+        <button onclick="openPrompt()">新增訂閱者</button>
+        <div id="subscriber-list">
+            <h3>訂閱者清單</h3>
+            <ul id="name-list"></ul>
+        </div>
+        
+        <div id="input-section">
+            <h3>輸入文字並加入表格</h3>
+            <input type="text" id="textInput" placeholder="輸入內容">
+            <button onclick="addToTable()">新增</button>
+            <table id="dataTable">
+                <tr>
+                    <th>內容</th>
+                </tr>
+            </table>
+        </div>
     }
 }
 
@@ -57,6 +70,17 @@ function openPrompt() {
         let listItem = document.createElement("li");
         listItem.textContent = name;
         list.appendChild(listItem);
+    }
+}
+
+function addToTable() {
+    let input = document.getElementById("textInput").value;
+    if (input.trim() !== "") {
+        let table = document.getElementById("dataTable");
+        let newRow = table.insertRow();
+        let newCell = newRow.insertCell(0);
+        newCell.textContent = input;
+        document.getElementById("textInput").value = ""; 
     }
 }
 
