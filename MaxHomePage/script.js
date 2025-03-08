@@ -61,7 +61,8 @@ function showContent(type) {
                 </tr>
             </table>
         </div>
-        `;       
+        `;
+        content.appendChild(addsubscriber);
     }
 }
 
