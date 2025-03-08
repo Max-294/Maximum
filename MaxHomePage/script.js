@@ -45,8 +45,18 @@ function showContent(type) {
     } else {
         // 顯示其他內容 (訂閱)
         const message = document.createElement("p");
-        message.textContent = `訂閱者名單：\n`;
+        message.textContent = `訂閱者名單：\n\n`;
         content.appendChild(message);
+    }
+}
+
+function openPrompt() {
+    let name = prompt("請輸入訂閱者的姓名：");
+    if (name && name.trim() !== "") {
+        let list = document.getElementById("name-list");
+        let listItem = document.createElement("li");
+        listItem.textContent = name;
+        list.appendChild(listItem);
     }
 }
 
