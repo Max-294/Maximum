@@ -2,126 +2,103 @@
 body {
   margin: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f0fdf6;
-  color: #333;
+  display: flex;
+  background: #f4fdfc;
 }
 
 .container {
   display: flex;
-  flex-direction: row;
-  min-height: 100vh;
+  width: 100%;
 }
 
 .sidebar {
   width: 240px;
-  background-color: #dff5ea;
+  background-color: #00796b;
+  color: white;
   padding: 20px;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-  flex-shrink: 0;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.logo {
+.sidebar .logo {
   width: 100%;
-  margin-bottom: 20px;
+  border-radius: 10px;
 }
 
-nav ul {
-  list-style-type: none;
+.sidebar nav ul {
+  list-style: none;
   padding: 0;
 }
 
-nav ul li {
+.sidebar nav ul li {
   margin: 15px 0;
 }
 
-nav ul li a {
+.sidebar nav ul li a {
+  color: white;
   text-decoration: none;
-  color: #00695c;
   font-weight: bold;
 }
 
 .visitor-counter {
-  margin-top: 30px;
+  margin-top: auto;
   font-size: 14px;
-  color: #444;
 }
 
-.content {
+main {
   flex: 1;
-  padding: 40px;
+  padding: 20px;
+  overflow-y: auto;
 }
 
 section {
-  margin-bottom: 60px;
+  margin-bottom: 40px;
 }
 
-h2 {
-  color: #00796b;
+.main-shrimp {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-top: 10px;
 }
 
-#wordsearch {
-  width: 300px;
-  height: 300px;
-  background-color: #fff;
-  border: 2px solid #ccc;
-  margin-bottom: 20px;
-}
-
-#wordlist ul {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  padding-left: 0;
-  list-style-type: none;
-}
-
-#wordlist li {
-  background-color: #b2dfdb;
-  padding: 5px 10px;
-  border-radius: 5px;
-  font-weight: bold;
-}
-
-input[type="email"] {
+#subscriberName, #adminPassword {
   padding: 8px;
-  width: 250px;
-  border: 1px solid #aaa;
-  border-radius: 4px;
-  margin-right: 10px;
+  margin-right: 8px;
+  margin-top: 8px;
 }
 
 button {
-  padding: 8px 16px;
-  background-color: #4db6ac;
-  border: none;
-  border-radius: 4px;
+  padding: 8px 12px;
+  background-color: #00796b;
   color: white;
+  border: none;
   cursor: pointer;
 }
 
 button:hover {
-  background-color: #00897b;
+  background-color: #005b4f;
 }
 
-@media (max-width: 768px) {
+#subscriberList li {
+  margin-top: 8px;
+}
+
+@media screen and (max-width: 768px) {
   .container {
     flex-direction: column;
   }
 
   .sidebar {
     width: 100%;
-    display: flex;
-    flex-direction: row;
-    overflow-x: auto;
+    height: auto;
   }
 
-  nav ul {
-    display: flex;
-    gap: 10px;
-    flex-wrap: nowrap;
-  }
-
-  .content {
-    padding: 20px;
+  main {
+    padding: 10px;
   }
 }

@@ -1,53 +1,47 @@
 // script.js
+let visitCount = localStorage.getItem('visitCount') || 0;
+visitCount++;
+localStorage.setItem('visitCount', visitCount);
+document.getElementById('visitorCounter').innerText = `參訪人數：${visitCount}`;
 
-// Visitor counter
-document.addEventListener("DOMContentLoaded", () => {
-  const counterElement = document.getElementById("counter");
-  let visits = localStorage.getItem("visitCount");
-  visits = visits ? parseInt(visits) + 1 : 1;
-  localStorage.setItem("visitCount", visits);
-  counterElement.textContent = visits;
-});
+const subscribers = JSON.parse(localStorage.getItem('subscribers') || '[]');
+renderSubscribers();
 
-// Word Search Game Setup
-const canvas = document.getElementById("wordsearch");
-const ctx = canvas.getContext("2d");
-
-const words = ["car", "smile", "man", "dog", "snow", "new", "boat", "show", "road", "same"];
-const gridSize = 10;
-const cellSize = 30;
-canvas.width = gridSize * cellSize;
-canvas.height = gridSize * cellSize;
-
-const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-const grid = Array.from({ length: gridSize }, () =>
-  Array.from({ length: gridSize }, () => letters[Math.floor(Math.random() * letters.length)])
-);
-
-function drawGrid() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.font = "20px Arial";
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
-
-  for (let y = 0; y < gridSize; y++) {
-    for (let x = 0; x < gridSize; x++) {
-      ctx.strokeRect(x * cellSize, y * cellSize, cellSize, cellSize);
-      ctx.fillText(grid[y][x], x * cellSize + cellSize / 2, y * cellSize + cellSize / 2);
-    }
+function addSubscriber() {
+  const name = document.getElementById('subscriberName').value;
+  const password = prompt("請輸入管理者密碼：");
+  if (password !== "1125") {
+    alert("密碼錯誤");
+    return;
+  }
+  if (name && !subscribers.includes(name)) {
+    subscribers.push(name);
+    localStorage.setItem('subscribers', JSON.stringify(subscribers));
+    renderSubscribers();
+    document.getElementById('subscriberName').value = '';
   }
 }
-drawGrid();
 
-// Subscribe interaction
-function subscribe() {
-  const email = document.getElementById("emailInput").value;
-  const msg = document.getElementById("subMessage");
-  if (email.includes("@")) {
-    msg.textContent = `感謝訂閱：${email}`;
-    msg.style.color = "green";
-  } else {
-    msg.textContent = "請輸入正確的 Email 格式！";
-    msg.style.color = "red";
+function removeSubscriber(name) {
+  const password = prompt("請輸入管理者密碼：");
+  if (password !== "1125") {
+    alert("密碼錯誤");
+    return;
   }
+  const index = subscribers.indexOf(name);
+  if (index !== -1) {
+    subscribers.splice(index, 1);
+    localStorage.setItem('subscribers', JSON.stringify(subscribers));
+    renderSubscribers();
+  }
+}
+
+function renderSubscribers() {
+  const list = document.getElementById('subscriberList');
+  list.innerHTML = '';
+  subscribers.forEach(name => {
+    const li = document.createElement('li');
+    li.innerHTML = `${name} <button onclick="removeSubscriber('${name}')">刪除</button>`;
+    list.appendChild(li);
+  });
 }
