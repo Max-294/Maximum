@@ -17,7 +17,7 @@
             <ul>
                 <li><a href="#gallery" class="active">蝦蝦圖展示區</a></li>
                 <li><a href="#ecology">泰國蝦生態解說</a></li>
-                <li><a href="#game">小遊戲試玩</a></li>
+                <li><a href="#game" onclick="regeneratePuzzle()">小遊戲試玩</a></li>
                 <li><a href="#stories">小妖怪故事集</a></li>
                 <li><a href="#subscription">訂閱名單</a></li>
             </ul>
@@ -56,6 +56,10 @@
                     <h3>要找的單字:</h3>
                     <ul id="words-to-find"></ul>
                 </div>
+            </div>
+            <div class="game-buttons">
+                <button onclick="regeneratePuzzle()">重新產生謎題</button>
+                <button onclick="showSolution()">公布解答</button>
             </div>
         </section>
 

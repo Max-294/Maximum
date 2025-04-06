@@ -116,6 +116,10 @@ section:target {
     background-color: #aaffaa;
 }
 
+#puzzle span.solution {
+    background-color: #ffaaaa; /* Highlight for solution */
+}
+
 #word-list ul {
     list-style: none;
 }
@@ -123,6 +127,26 @@ section:target {
 #word-list li.found {
     text-decoration: line-through;
     color: green;
+}
+
+/* Game Buttons */
+.game-buttons {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+}
+
+.game-buttons button {
+    padding: 5px 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.game-buttons button:hover {
+    background-color: #45a049;
 }
 
 /* Subscription */

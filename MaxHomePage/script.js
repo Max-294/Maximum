@@ -5,27 +5,88 @@ localStorage.setItem('visitorCount', visitorCount);
 document.getElementById('visitor-count').textContent = visitorCount;
 
 // Word Search Game
-const puzzleData = [
-    "JLIBPNZQOAJD",
-    "KBFAMZSBEARO",
-    "OAKTMICETQGU",
-    "YLLSHOEDAOGU",
-    "SLHCOWZBTYAH",
-    "MHANDSAOISLA",
-    "TOPIFYPYAGJT",
-    "EZTBELTEATAH"
-];
-
-const wordsToFind = ["BELT", "BEAR", "SHOE", "HAND", "BALL", "MICE", "TOYS", "BAT", "DOG", "TOP", "HAT", "ZAP", "GAL", "BOY", "CAT"];
+const fixedWords = ["SHRIMP", "THAI", "HOME", "WATER", "TANK", "FISH", "SEA", "FOOD", "SHELL", "CLAW"];
+let puzzleData = [];
 let selectedCells = [];
 let foundWords = new Set();
+let wordPositions = []; // To store the positions of words for the solution
 
-// Generate Puzzle
+// Generate a New Puzzle
 function generatePuzzle() {
     const puzzleDiv = document.getElementById('puzzle');
+    const wordList = document.getElementById('words-to-find');
+    puzzleDiv.innerHTML = '';
+    wordList.innerHTML = '';
+    selectedCells = [];
+    foundWords.clear();
+    wordPositions = [];
+
+    // Create a 10x10 grid
+    const size = 10;
+    puzzleData = Array(size).fill().map(() => Array(size).fill(' '));
+
+    // Place words in the grid (horizontal or vertical)
+    fixedWords.forEach(word => {
+        let placed = false;
+        while (!placed) {
+            const direction = Math.random() > 0.5 ? 'horizontal' : 'vertical';
+            let row, col;
+
+            if (direction === 'horizontal') {
+                row = Math.floor(Math.random() * size);
+                col = Math.floor(Math.random() * (size - word.length + 1));
+                let canPlace = true;
+                for (let i = 0; i < word.length; i++) {
+                    if (puzzleData[row][col + i] !== ' ' && puzzleData[row][col + i] !== word[i]) {
+                        canPlace = false;
+                        break;
+                    }
+                }
+                if (canPlace) {
+                    const positions = [];
+                    for (let i = 0; i < word.length; i++) {
+                        puzzleData[row][col + i] = word[i];
+                        positions.push({ row, col: col + i });
+                    }
+                    wordPositions.push({ word, positions });
+                    placed = true;
+                }
+            } else {
+                row = Math.floor(Math.random() * (size - word.length + 1));
+                col = Math.floor(Math.random() * size);
+                let canPlace = true;
+                for (let i = 0; i < word.length; i++) {
+                    if (puzzleData[row + i][col] !== ' ' && puzzleData[row + i][col] !== word[i]) {
+                        canPlace = false;
+                        break;
+                    }
+                }
+                if (canPlace) {
+                    const positions = [];
+                    for (let i = 0; i < word.length; i++) {
+                        puzzleData[row + i][col] = word[i];
+                        positions.push({ row: row + i, col });
+                    }
+                    wordPositions.push({ word, positions });
+                    placed = true;
+                }
+            }
+        }
+    });
+
+    // Fill remaining spaces with random letters
+    for (let row = 0; row < size; row++) {
+        for (let col = 0; col < size; col++) {
+            if (puzzleData[row][col] === ' ') {
+                puzzleData[row][col] = String.fromCharCode(65 + Math.floor(Math.random() * 26));
+            }
+        }
+    }
+
+    // Render the puzzle
     puzzleData.forEach((row, rowIndex) => {
         const rowDiv = document.createElement('div');
-        row.split('').forEach((letter, colIndex) => {
+        row.forEach((letter, colIndex) => {
             const cell = document.createElement('span');
             cell.textContent = letter;
             cell.dataset.row = rowIndex;
@@ -36,12 +97,42 @@ function generatePuzzle() {
         puzzleDiv.appendChild(rowDiv);
     });
 
-    const wordList = document.getElementById('words-to-find');
-    wordsToFind.forEach(word => {
+    // Render the word list
+    fixedWords.forEach(word => {
         const li = document.createElement('li');
         li.textContent = word;
         li.dataset.word = word;
         wordList.appendChild(li);
+    });
+}
+
+// Regenerate Puzzle (called when clicking the link or button)
+function regeneratePuzzle() {
+    generatePuzzle();
+}
+
+// Show Solution
+function showSolution() {
+    document.querySelectorAll('#puzzle span').forEach(cell => {
+        cell.classList.remove('selected', 'solution');
+    });
+
+    wordPositions.forEach(({ positions }) => {
+        positions.forEach(({ row, col }) => {
+            const cell = document.querySelector(`#puzzle span[data-row="${row}"][data-col="${col}"]`);
+            if (cell) {
+                cell.classList.add('solution');
+            }
+        });
+    });
+
+    // Mark all words as found
+    fixedWords.forEach(word => {
+        foundWords.add(word);
+        const wordItem = document.querySelector(`#words-to-find li[data-word="${word}"]`);
+        if (wordItem) {
+            wordItem.classList.add('found');
+        }
     });
 }
 
@@ -79,7 +170,7 @@ function checkWord() {
         word = sortedByRow.map(c => puzzleData[c.row][c.col]).join('');
     }
 
-    if (wordsToFind.includes(word) && !foundWords.has(word)) {
+    if (fixedWords.includes(word) && !foundWords.has(word)) {
         foundWords.add(word);
         document.querySelector(`#words-to-find li[data-word="${word}"]`).classList.add('found');
         selectedCells = [];
@@ -129,9 +220,9 @@ function addSubscriber() {
     subscribers.push(name);
     localStorage.setItem('subscribers', JSON.stringify(subscribers));
     renderSubscribers();
-    alert(`成功新增訂閱者: ${name}`); // Feedback for successful addition
-    nameInput.value = ''; // Clear the name input
-    passwordInput.value = ''; // Clear the password input
+    alert(`成功新增訂閱者: ${name}`);
+    nameInput.value = '';
+    passwordInput.value = '';
 }
 
 function deleteSubscriber() {
@@ -160,7 +251,7 @@ function deleteSubscriber() {
     subscribers.splice(index, 1);
     localStorage.setItem('subscribers', JSON.stringify(subscribers));
     renderSubscribers();
-    alert(`成功刪除訂閱者: ${name}`); // Feedback for successful deletion
+    alert(`成功刪除訂閱者: ${name}`);
     nameInput.value = '';
     passwordInput.value = '';
 }
