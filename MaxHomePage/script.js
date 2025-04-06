@@ -92,6 +92,10 @@ let subscribers = JSON.parse(localStorage.getItem('subscribers')) || [];
 
 function renderSubscribers() {
     const list = document.getElementById('subscriber-list');
+    if (!list) {
+        console.error('Subscriber list element not found!');
+        return;
+    }
     list.innerHTML = '';
     subscribers.forEach((name, index) => {
         const li = document.createElement('li');
@@ -101,8 +105,16 @@ function renderSubscribers() {
 }
 
 function addSubscriber() {
-    const name = document.getElementById('subscriber-name').value.trim();
-    const password = document.getElementById('password').value;
+    const nameInput = document.getElementById('subscriber-name');
+    const passwordInput = document.getElementById('password');
+
+    if (!nameInput || !passwordInput) {
+        console.error('Input elements not found!');
+        return;
+    }
+
+    const name = nameInput.value.trim();
+    const password = passwordInput.value;
 
     if (password !== '1125') {
         alert('密碼錯誤！請輸入正確密碼 (1125)。');
@@ -117,13 +129,22 @@ function addSubscriber() {
     subscribers.push(name);
     localStorage.setItem('subscribers', JSON.stringify(subscribers));
     renderSubscribers();
-    document.getElementById('subscriber-name').value = '';
-    document.getElementById('password').value = '';
+    alert(`成功新增訂閱者: ${name}`); // Feedback for successful addition
+    nameInput.value = ''; // Clear the name input
+    passwordInput.value = ''; // Clear the password input
 }
 
 function deleteSubscriber() {
-    const name = document.getElementById('subscriber-name').value.trim();
-    const password = document.getElementById('password').value;
+    const nameInput = document.getElementById('subscriber-name');
+    const passwordInput = document.getElementById('password');
+
+    if (!nameInput || !passwordInput) {
+        console.error('Input elements not found!');
+        return;
+    }
+
+    const name = nameInput.value.trim();
+    const password = passwordInput.value;
 
     if (password !== '1125') {
         alert('密碼錯誤！請輸入正確密碼 (1125)。');
@@ -139,8 +160,9 @@ function deleteSubscriber() {
     subscribers.splice(index, 1);
     localStorage.setItem('subscribers', JSON.stringify(subscribers));
     renderSubscribers();
-    document.getElementById('subscriber-name').value = '';
-    document.getElementById('password').value = '';
+    alert(`成功刪除訂閱者: ${name}`); // Feedback for successful deletion
+    nameInput.value = '';
+    passwordInput.value = '';
 }
 
 // Initialize

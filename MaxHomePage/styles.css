@@ -8,6 +8,7 @@
 body {
     display: flex;
     min-height: 100vh;
+    background-color: #E0F7E0; /* Light green background */
 }
 
 /* Sidebar */
@@ -99,7 +100,7 @@ section:target {
 
 #puzzle {
     font-family: monospace;
-    FONT-SIZE: 1.2em;
+    font-size: 1.2em;
     line-height: 1.5;
 }
 
