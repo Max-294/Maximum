@@ -1,116 +1,153 @@
-/* 整體樣式 */
-body {
-    font-family: Arial, sans-serif;
+* {
     margin: 0;
     padding: 0;
-    display: flex;
-    height: 100vh;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
 }
 
-.container {
+body {
     display: flex;
-    width: 100%;
+    min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background-color: #f1f1f1;
+    padding: 20px;
+    position: fixed;
     height: 100%;
-}
-
-.left-panel {
-    width: 200px;
-    background-color: #007BFF;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-}
-
-.left-panel .title {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 20px;
-}
-
-.left-panel button {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    font-size: 16px;
-    cursor: pointer;
-    background-color: white;
-    color: #007BFF;
-    border: none;
-    border-radius: 4px;
-    transition: background-color 0.3s;
-}
-
-.left-panel button:hover {
-    background-color: #0056b3;
-    color: white;
-}
-
-.right-panel {
-    flex: 1;
-    background-color: #f4f4f4;
-    padding: 20px;
     overflow-y: auto;
 }
 
-.right-panel h1 {
-    font-size: 24px;
-    margin-bottom: 10px;
+.logo img {
+    width: 100%;
+    height: auto;
 }
 
-.right-panel p {
-    font-size: 16px;
+.logo h1 {
+    font-size: 1.5em;
+    text-align: center;
+    margin: 10px 0;
 }
 
-#word-list {
-    display: flex;
-    flex-direction: column; /* 每行顯示為一列 */
-    gap: 10px; /* 行之間的間距 */
-    margin-bottom: 20px;
+nav ul {
+    list-style: none;
 }
 
-.word-row {
-    display: flex; /* 單行顯示多個單字 */
-    gap: 15px; /* 單字之間的間距 */
-    justify-content: flex-start; /* 將單字靠左對齊 */
+nav ul li {
+    margin: 10px 0;
 }
 
-.word-row span {
-    font-size: 18px;
-    text-align: left; /* 編號和單字對齊 */
+nav ul li a {
+    text-decoration: none;
+    color: #333;
+    display: block;
+    padding: 10px;
+    border-radius: 5px;
 }
 
-.word-row span {
-    font-size: 18px;
+nav ul li a:hover, nav ul li a.active {
+    background-color: #ddd;
 }
 
-#letter-grid {
-    display: flex;
-    flex-direction: column; /* 行垂直排列 */
-    gap: 5px; /* 行間距 */
+.visitor-counter {
     margin-top: 20px;
+    text-align: center;
 }
 
-
-.grid-row {
-    display: flex; /* 字母在同一行顯示 */
-    gap: 5px; /* 字母間距 */
+/* Main Content */
+.main-content {
+    margin-left: 270px;
+    padding: 20px;
+    flex: 1;
 }
 
-.grid-cell {
+section {
+    display: none;
+}
+
+section:target {
+    display: block;
+}
+
+#gallery:target ~ #ecology,
+#gallery:target ~ #game,
+#gallery:target ~ #stories,
+#gallery:target ~ #subscription {
+    display: none;
+}
+
+/* Gallery */
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.gallery img {
+    width: 250px; /* Adjust based on your logo size */
+    height: auto;
+    border-radius: 5px;
+}
+
+/* Word Search */
+#word-search {
+    display: flex;
+    gap: 20px;
+}
+
+#puzzle {
+    font-family: monospace;
+    FONT-SIZE: 1.2em;
+    line-height: 1.5;
+}
+
+#puzzle span {
     display: inline-block;
     width: 30px;
     height: 30px;
     text-align: center;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    line-height: 30px;
     cursor: pointer;
-    user-select: none;
-    background-color: white;
 }
 
-.grid-cell.selected {
-    background-color: lightgreen;
+#puzzle span.selected {
+    background-color: #aaffaa;
+}
+
+#word-list ul {
+    list-style: none;
+}
+
+#word-list li.found {
+    text-decoration: line-through;
+    color: green;
+}
+
+/* Subscription */
+.subscription-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.subscription-form input {
+    padding: 5px;
+    font-size: 1em;
+}
+
+.subscription-form button {
+    padding: 5px 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.subscription-form button:hover {
+    background-color: #45a049;
+}
+
+#subscriber-list {
+    list-style: none;
 }
