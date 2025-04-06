@@ -1,27 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>泰國蝦的第一個家</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>泰國蝦的第一個家</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <div class="container">
-        <!-- 左側區域 -->
-        <div class="left-panel">
-            <div class="title">泰國蝦的第一個家</div>
-            <button onclick="showContent('WordSearch')">WordSearch</button>
-            <button onclick="showContent('解說')">解說</button>
-            <button onclick="showContent('Idea')">Idea</button>
-            <button onclick="showContent('試玩')">試玩</button>
-            <button onclick="showContent('訂閱')">訂閱</button>
+  <div class="container">
+    <aside class="sidebar">
+      <img src="logo.png" alt="Logo" class="logo" />
+      <nav>
+        <ul>
+          <li><a href="#gallery">蝦蝦圖展示區</a></li>
+          <li><a href="#eco">泰國蝦生態解說</a></li>
+          <li><a href="#game">小遊戲試玩</a></li>
+          <li><a href="#story">小妖怪故事集</a></li>
+          <li><a href="#subscribe">訂閱名單</a></li>
+        </ul>
+      </nav>
+      <div class="visitor-counter">
+        👁️ 參訪人數：<span id="counter">0</span>
+      </div>
+    </aside>
+    <main class="content">
+      <section id="gallery">
+        <h2>蝦蝦圖展示區</h2>
+        <p>展示可愛的泰國蝦圖片（尚未上傳圖片）</p>
+      </section>
+
+      <section id="eco">
+        <h2>泰國蝦生態解說</h2>
+        <p>這裡會介紹蝦蝦的生活環境與習性。</p>
+      </section>
+
+      <section id="game">
+        <h2>小遊戲試玩：英文字謎</h2>
+        <canvas id="wordsearch"></canvas>
+        <div id="wordlist">
+          <ul>
+            <li>car</li><li>smile</li><li>man</li><li>dog</li><li>snow</li>
+            <li>new</li><li>boat</li><li>show</li><li>road</li><li>same</li>
+          </ul>
         </div>
-        <!-- 右側區域 -->
-        <div class="right-panel" id="content">
-            請選擇左側的按鈕以顯示內容
-        </div>
-    </div>
-    <script src="script.js"></script>
+      </section>
+
+      <section id="story">
+        <h2>小妖怪故事集</h2>
+        <p>來看看「03暗黑巨手魔」等有趣的妖怪傳說吧！</p>
+      </section>
+
+      <section id="subscribe">
+        <h2>訂閱名單</h2>
+        <input type="email" placeholder="輸入你的 Email" id="emailInput" />
+        <button onclick="subscribe()">訂閱</button>
+        <p id="subMessage"></p>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>

@@ -1,0 +1,127 @@
+/* style.css */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f0fdf6;
+  color: #333;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 240px;
+  background-color: #dff5ea;
+  padding: 20px;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.logo {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+nav ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+nav ul li {
+  margin: 15px 0;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: #00695c;
+  font-weight: bold;
+}
+
+.visitor-counter {
+  margin-top: 30px;
+  font-size: 14px;
+  color: #444;
+}
+
+.content {
+  flex: 1;
+  padding: 40px;
+}
+
+section {
+  margin-bottom: 60px;
+}
+
+h2 {
+  color: #00796b;
+}
+
+#wordsearch {
+  width: 300px;
+  height: 300px;
+  background-color: #fff;
+  border: 2px solid #ccc;
+  margin-bottom: 20px;
+}
+
+#wordlist ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-left: 0;
+  list-style-type: none;
+}
+
+#wordlist li {
+  background-color: #b2dfdb;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+input[type="email"] {
+  padding: 8px;
+  width: 250px;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  margin-right: 10px;
+}
+
+button {
+  padding: 8px 16px;
+  background-color: #4db6ac;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #00897b;
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+  }
+
+  nav ul {
+    display: flex;
+    gap: 10px;
+    flex-wrap: nowrap;
+  }
+
+  .content {
+    padding: 20px;
+  }
+}
