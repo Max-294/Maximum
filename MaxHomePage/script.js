@@ -208,7 +208,7 @@ function addSubscriber() {
     const password = passwordInput.value;
 
     if (password !== '1125') {
-        alert('密碼錯誤！請輸入正確密碼 (1125)。');
+        alert('密碼錯誤！請輸入正確密碼。');
         return;
     }
 
@@ -238,7 +238,7 @@ function deleteSubscriber() {
     const password = passwordInput.value;
 
     if (password !== '1125') {
-        alert('密碼錯誤！請輸入正確密碼 (1125)。');
+        alert('密碼錯誤！請輸入正確密碼。');
         return;
     }
 
