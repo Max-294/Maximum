@@ -149,6 +149,35 @@ section:target {
     background-color: #45a049;
 }
 
+/* Stories */
+.story {
+    margin-bottom: 20px;
+}
+
+.story h3 {
+    margin-bottom: 10px;
+}
+
+.story p {
+    margin-bottom: 10px;
+}
+
+.zhuyin {
+    font-size: 0.8em;
+    color: #555;
+}
+
+.ratings {
+    font-style: italic;
+}
+
+.story-image {
+    max-width: 100%;
+    height: auto;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+
 /* Subscription */
 .subscription-form {
     display: flex;

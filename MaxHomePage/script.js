@@ -25,14 +25,14 @@ function generatePuzzle() {
     const size = 10;
     puzzleData = Array(size).fill().map(() => Array(size).fill(' '));
 
-    // Place words in the grid (horizontal or vertical)
+    // Place words in the grid (horizontal, vertical, or diagonal)
     fixedWords.forEach(word => {
         let placed = false;
         while (!placed) {
-            const direction = Math.random() > 0.5 ? 'horizontal' : 'vertical';
+            const direction = Math.floor(Math.random() * 4); // 0: horizontal, 1: vertical, 2: diagonal-right, 3: diagonal-left
             let row, col;
 
-            if (direction === 'horizontal') {
+            if (direction === 0) { // Horizontal
                 row = Math.floor(Math.random() * size);
                 col = Math.floor(Math.random() * (size - word.length + 1));
                 let canPlace = true;
@@ -51,7 +51,7 @@ function generatePuzzle() {
                     wordPositions.push({ word, positions });
                     placed = true;
                 }
-            } else {
+            } else if (direction === 1) { // Vertical
                 row = Math.floor(Math.random() * (size - word.length + 1));
                 col = Math.floor(Math.random() * size);
                 let canPlace = true;
@@ -66,6 +66,44 @@ function generatePuzzle() {
                     for (let i = 0; i < word.length; i++) {
                         puzzleData[row + i][col] = word[i];
                         positions.push({ row: row + i, col });
+                    }
+                    wordPositions.push({ word, positions });
+                    placed = true;
+                }
+            } else if (direction === 2) { // Diagonal-right (top-left to bottom-right)
+                row = Math.floor(Math.random() * (size - word.length + 1));
+                col = Math.floor(Math.random() * (size - word.length + 1));
+                let canPlace = true;
+                for (let i = 0; i < word.length; i++) {
+                    if (puzzleData[row + i][col + i] !== ' ' && puzzleData[row + i][col + i] !== word[i]) {
+                        canPlace = false;
+                        break;
+                    }
+                }
+                if (canPlace) {
+                    const positions = [];
+                    for (let i = 0; i < word.length; i++) {
+                        puzzleData[row + i][col + i] = word[i];
+                        positions.push({ row: row + i, col: col + i });
+                    }
+                    wordPositions.push({ word, positions });
+                    placed = true;
+                }
+            } else { // Diagonal-left (top-right to bottom-left)
+                row = Math.floor(Math.random() * (size - word.length + 1));
+                col = Math.floor(Math.random() * word.length) + (word.length - 1);
+                let canPlace = true;
+                for (let i = 0; i < word.length; i++) {
+                    if (puzzleData[row + i][col - i] !== ' ' && puzzleData[row + i][col - i] !== word[i]) {
+                        canPlace = false;
+                        break;
+                    }
+                }
+                if (canPlace) {
+                    const positions = [];
+                    for (let i = 0; i < word.length; i++) {
+                        puzzleData[row + i][col - i] = word[i];
+                        positions.push({ row: row + i, col: col - i });
                     }
                     wordPositions.push({ word, positions });
                     placed = true;
@@ -157,8 +195,9 @@ function selectCell(cell) {
 function checkWord() {
     if (selectedCells.length < 3) return;
 
-    // Check horizontal
     let word = '';
+
+    // Check horizontal
     const sortedByCol = [...selectedCells].sort((a, b) => a.col - b.col);
     if (sortedByCol.every((c, i) => i === 0 || c.col === sortedByCol[i-1].col + 1) && sortedByCol.every(c => c.row === sortedByCol[0].row)) {
         word = sortedByCol.map(c => puzzleData[c.row][c.col]).join('');
@@ -168,6 +207,18 @@ function checkWord() {
     const sortedByRow = [...selectedCells].sort((a, b) => a.row - b.row);
     if (sortedByRow.every((c, i) => i === 0 || c.row === sortedByRow[i-1].row + 1) && sortedByRow.every(c => c.col === sortedByRow[0].col)) {
         word = sortedByRow.map(c => puzzleData[c.row][c.col]).join('');
+    }
+
+    // Check diagonal-right (top-left to bottom-right)
+    const sortedByRowCol = [...selectedCells].sort((a, b) => a.row - b.row || a.col - b.col);
+    if (sortedByRowCol.every((c, i) => i === 0 || (c.row === sortedByRowCol[i-1].row + 1 && c.col === sortedByRowCol[i-1].col + 1))) {
+        word = sortedByRowCol.map(c => puzzleData[c.row][c.col]).join('');
+    }
+
+    // Check diagonal-left (top-right to bottom-left)
+    const sortedByRowColDesc = [...selectedCells].sort((a, b) => a.row - b.row || b.col - a.col);
+    if (sortedByRowColDesc.every((c, i) => i === 0 || (c.row === sortedByRowColDesc[i-1].row + 1 && c.col === sortedByRowColDesc[i-1].col - 1))) {
+        word = sortedByRowColDesc.map(c => puzzleData[c.row][c.col]).join('');
     }
 
     if (fixedWords.includes(word) && !foundWords.has(word)) {
@@ -208,7 +259,7 @@ function addSubscriber() {
     const password = passwordInput.value;
 
     if (password !== '1125') {
-        alert('密碼錯誤！請輸入正確密碼。');
+        alert('密碼錯誤！請輸入正確密碼 (1125)。');
         return;
     }
 
@@ -238,7 +289,7 @@ function deleteSubscriber() {
     const password = passwordInput.value;
 
     if (password !== '1125') {
-        alert('密碼錯誤！請輸入正確密碼。');
+        alert('密碼錯誤！請輸入正確密碼 (1125)。');
         return;
     }
 
