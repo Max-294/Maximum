@@ -1,15 +1,43 @@
+// Initialize Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyB2RNGWJ0VAgDyWRG84CuE_EHktd9ThkXI",
+  authDomain: "shrimp-s-first-home.firebaseapp.com",
+  databaseURL: "https://shrimp-s-first-home-default-rtdb.firebaseio.com",
+  projectId: "shrimp-s-first-home",
+  storageBucket: "shrimp-s-first-home.firebasestorage.app",
+  messagingSenderId: "674906578968",
+  appId: "1:674906578968:web:e7bbdd5261caacd201636d",
+  measurementId: "G-MNCCYWXR83"
+};
+
+// Initialize Firebase app
+firebase.initializeApp(firebaseConfig);
+
+// Reference to the Realtime Database
+const db = firebase.database();
+const visitorRef = db.ref('visitorCount');
+
 // Visitor Counter
-let visitorCount = localStorage.getItem('visitorCount') || 0;
-visitorCount++;
-localStorage.setItem('visitorCount', visitorCount);
-document.getElementById('visitor-count').textContent = visitorCount;
+visitorRef.once('value', (snapshot) => {
+    let visitorCount = snapshot.val() || 0;
+    visitorCount++;
+    visitorRef.set(visitorCount);
+    document.getElementById('visitor-count').textContent = visitorCount;
+}, (error) => {
+    console.error('Error fetching visitor count:', error);
+    // Fallback to local counter if Firebase fails
+    let visitorCount = localStorage.getItem('visitorCount') || 0;
+    visitorCount++;
+    localStorage.setItem('visitorCount', visitorCount);
+    document.getElementById('visitor-count').textContent = visitorCount;
+});
 
 // Word Search Game
 const fixedWords = ["SHRIMP", "THAI", "HOME", "WATER", "TANK", "FISH", "SEA", "FOOD", "SHELL", "CLAW"];
 let puzzleData = [];
 let selectedCells = [];
 let foundWords = new Set();
-let wordPositions = []; // To store the positions of words for the solution
+let wordPositions = [];
 
 // Generate a New Puzzle
 function generatePuzzle() {
@@ -199,116 +227,4 @@ function checkWord() {
 
     // Check horizontal
     const sortedByCol = [...selectedCells].sort((a, b) => a.col - b.col);
-    if (sortedByCol.every((c, i) => i === 0 || c.col === sortedByCol[i-1].col + 1) && sortedByCol.every(c => c.row === sortedByCol[0].row)) {
-        word = sortedByCol.map(c => puzzleData[c.row][c.col]).join('');
-    }
-
-    // Check vertical
-    const sortedByRow = [...selectedCells].sort((a, b) => a.row - b.row);
-    if (sortedByRow.every((c, i) => i === 0 || c.row === sortedByRow[i-1].row + 1) && sortedByRow.every(c => c.col === sortedByRow[0].col)) {
-        word = sortedByRow.map(c => puzzleData[c.row][c.col]).join('');
-    }
-
-    // Check diagonal-right (top-left to bottom-right)
-    const sortedByRowCol = [...selectedCells].sort((a, b) => a.row - b.row || a.col - b.col);
-    if (sortedByRowCol.every((c, i) => i === 0 || (c.row === sortedByRowCol[i-1].row + 1 && c.col === sortedByRowCol[i-1].col + 1))) {
-        word = sortedByRowCol.map(c => puzzleData[c.row][c.col]).join('');
-    }
-
-    // Check diagonal-left (top-right to bottom-left)
-    const sortedByRowColDesc = [...selectedCells].sort((a, b) => a.row - b.row || b.col - a.col);
-    if (sortedByRowColDesc.every((c, i) => i === 0 || (c.row === sortedByRowColDesc[i-1].row + 1 && c.col === sortedByRowColDesc[i-1].col - 1))) {
-        word = sortedByRowColDesc.map(c => puzzleData[c.row][c.col]).join('');
-    }
-
-    if (fixedWords.includes(word) && !foundWords.has(word)) {
-        foundWords.add(word);
-        document.querySelector(`#words-to-find li[data-word="${word}"]`).classList.add('found');
-        selectedCells = [];
-        document.querySelectorAll('#puzzle span').forEach(cell => cell.classList.remove('selected'));
-    }
-}
-
-// Subscription List
-let subscribers = JSON.parse(localStorage.getItem('subscribers')) || [];
-
-function renderSubscribers() {
-    const list = document.getElementById('subscriber-list');
-    if (!list) {
-        console.error('Subscriber list element not found!');
-        return;
-    }
-    list.innerHTML = '';
-    subscribers.forEach((name, index) => {
-        const li = document.createElement('li');
-        li.textContent = `${index + 1}. ${name}`;
-        list.appendChild(li);
-    });
-}
-
-function addSubscriber() {
-    const nameInput = document.getElementById('subscriber-name');
-    const passwordInput = document.getElementById('password');
-
-    if (!nameInput || !passwordInput) {
-        console.error('Input elements not found!');
-        return;
-    }
-
-    const name = nameInput.value.trim();
-    const password = passwordInput.value;
-
-    if (password !== '1125') {
-        alert('密碼錯誤！請輸入正確密碼 (1125)。');
-        return;
-    }
-
-    if (name === '') {
-        alert('請輸入名稱！');
-        return;
-    }
-
-    subscribers.push(name);
-    localStorage.setItem('subscribers', JSON.stringify(subscribers));
-    renderSubscribers();
-    alert(`成功新增訂閱者: ${name}`);
-    nameInput.value = '';
-    passwordInput.value = '';
-}
-
-function deleteSubscriber() {
-    const nameInput = document.getElementById('subscriber-name');
-    const passwordInput = document.getElementById('password');
-
-    if (!nameInput || !passwordInput) {
-        console.error('Input elements not found!');
-        return;
-    }
-
-    const name = nameInput.value.trim();
-    const password = passwordInput.value;
-
-    if (password !== '1125') {
-        alert('密碼錯誤！請輸入正確密碼 (1125)。');
-        return;
-    }
-
-    const index = subscribers.indexOf(name);
-    if (index === -1) {
-        alert('找不到該名稱！');
-        return;
-    }
-
-    subscribers.splice(index, 1);
-    localStorage.setItem('subscribers', JSON.stringify(subscribers));
-    renderSubscribers();
-    alert(`成功刪除訂閱者: ${name}`);
-    nameInput.value = '';
-    passwordInput.value = '';
-}
-
-// Initialize
-window.onload = () => {
-    generatePuzzle();
-    renderSubscribers();
-};
+    if (sortedByCol.every((c, i) => i === 0 || c.col === sortedByCol[i-1].col + 1)
