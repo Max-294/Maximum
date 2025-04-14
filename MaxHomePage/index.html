@@ -6,8 +6,56 @@
     <title>泰國蝦的第一個家</title>
     <link rel="stylesheet" href="styles.css">
     <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+        import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
+
+        // Your Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyB2RNGWJ0VAgDyWRG84CuE_EHktd9ThkXI",
+            authDomain: "shrimp-s-first-home.firebaseapp.com",
+            databaseURL: "https://shrimp-s-first-home-default-rtdb.firebaseio.com",
+            projectId: "shrimp-s-first-home",
+            storageBucket: "shrimp-s-first-home.firebasestorage.app",
+            messagingSenderId: "674906578968",
+            appId: "1:674906578968:web:e7bbdd5261caacd201636d",
+            measurementId: "G-MNCCYWXR83"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const visitorRef = ref(db, 'visitorCount');
+
+        // Visitor Counter Logic
+        const visitorCountElement = document.getElementById('visitor-count');
+        if (visitorCountElement) {
+            onValue(visitorRef, (snapshot) => {
+                let visitorCount = snapshot.val() || 0;
+                visitorCount++;
+                set(visitorRef, visitorCount).then(() => {
+                    visitorCountElement.textContent = visitorCount;
+                    console.log("Visitor count updated:", visitorCount);
+                }).catch((error) => {
+                    console.error("Error updating visitor count:", error);
+                    // Fallback to local counter
+                    let localVisitorCount = parseInt(localStorage.getItem('visitorCount')) || 0;
+                    localVisitorCount++;
+                    localStorage.setItem('visitorCount', localVisitorCount);
+                    visitorCountElement.textContent = localVisitorCount;
+                });
+            }, (error) => {
+                console.error("Error fetching visitor count:", error);
+                // Fallback to local counter
+                let localVisitorCount = parseInt(localStorage.getItem('visitorCount')) || 0;
+                localVisitorCount++;
+                localStorage.setItem('visitorCount', localVisitorCount);
+                visitorCountElement.textContent = localVisitorCount;
+            }, { onlyOnce: true });
+        } else {
+            console.error("Visitor count element not found!");
+        }
+    </script>
 </head>
 <body>
     <!-- Sidebar -->

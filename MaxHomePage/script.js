@@ -1,73 +1,3 @@
-// Initialize Firebase
-const firebaseConfig = {
-    apiKey: "AIzaSyB2RNGWJ0VAgDyWRG84CuE_EHktd9ThkXI",
-    authDomain: "shrimp-s-first-home.firebaseapp.com",
-    databaseURL: "https://shrimp-s-first-home-default-rtdb.firebaseio.com",
-    projectId: "shrimp-s-first-home",
-    storageBucket: "shrimp-s-first-home.firebasestorage.app",
-    messagingSenderId: "674906578968",
-    appId: "1:674906578968:web:e7bbdd5261caacd201636d",
-    measurementId: "G-MNCCYWXR83"
-  };
-
-// Initialize Firebase app
-try {
-    firebase.initializeApp(firebaseConfig);
-    console.log("Firebase initialized successfully");
-} catch (error) {
-    console.error("Firebase initialization failed:", error);
-}
-
-// Reference to the Realtime Database
-let db, visitorRef;
-try {
-    db = firebase.database();
-    visitorRef = db.ref('visitorCount');
-} catch (error) {
-    console.error("Error setting up Firebase database reference:", error);
-}
-
-// Visitor Counter
-function updateVisitorCount() {
-    const visitorCountElement = document.getElementById('visitor-count');
-    if (!visitorCountElement) {
-        console.error("Visitor count element not found!");
-        return;
-    }
-
-    // Fallback counter using localStorage
-    let localVisitorCount = parseInt(localStorage.getItem('visitorCount')) || 0;
-
-    if (visitorRef) {
-        visitorRef.once('value', (snapshot) => {
-            let visitorCount = snapshot.val() || 0;
-            visitorCount++;
-            visitorRef.set(visitorCount).then(() => {
-                visitorCountElement.textContent = visitorCount;
-                console.log("Visitor count updated in Firebase:", visitorCount);
-            }).catch((error) => {
-                console.error("Error updating visitor count in Firebase:", error);
-                // Fallback to local counter
-                localVisitorCount++;
-                localStorage.setItem('visitorCount', localVisitorCount);
-                visitorCountElement.textContent = localVisitorCount;
-            });
-        }, (error) => {
-            console.error("Error fetching visitor count from Firebase:", error);
-            // Fallback to local counter
-            localVisitorCount++;
-            localStorage.setItem('visitorCount', localVisitorCount);
-            visitorCountElement.textContent = localVisitorCount;
-        });
-    } else {
-        // If Firebase isn't available, use local counter
-        localVisitorCount++;
-        localStorage.setItem('visitorCount', localVisitorCount);
-        visitorCountElement.textContent = localVisitorCount;
-        console.warn("Firebase not available, using local counter:", localVisitorCount);
-    }
-}
-
 // Word Search Game
 const fixedWords = ["SHRIMP", "THAI", "HOME", "WATER", "TANK", "FISH", "SEA", "FOOD", "SHELL", "CLAW"];
 let puzzleData = [];
@@ -329,7 +259,7 @@ function addSubscriber() {
     subscribers.push(name);
     localStorage.setItem('subscribers', JSON.stringify(subscribers));
     renderSubscribers();
-    alert(`成功新增訂閱者: ${name}`); // Do not display the password in the alert
+    alert(`成功新增訂閱者: ${name}`);
     nameInput.value = '';
     passwordInput.value = '';
 }
@@ -360,14 +290,13 @@ function deleteSubscriber() {
     subscribers.splice(index, 1);
     localStorage.setItem('subscribers', JSON.stringify(subscribers));
     renderSubscribers();
-    alert(`成功刪除訂閱者: ${name}`); // Do not display the password in the alert
+    alert(`成功刪除訂閱者: ${name}`);
     nameInput.value = '';
     passwordInput.value = '';
 }
 
 // Initialize
 window.onload = () => {
-    updateVisitorCount();
     generatePuzzle();
     renderSubscribers();
 };
