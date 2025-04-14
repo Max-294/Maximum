@@ -1,153 +1,38 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-}
-
 body {
-    display: flex;
-    min-height: 100vh;
+  margin: 0;
+  font-family: sans-serif;
 }
-
-/* Sidebar */
+.container {
+  display: flex;
+}
 .sidebar {
-    width: 250px;
-    background-color: #f1f1f1;
-    padding: 20px;
-    position: fixed;
-    height: 100%;
-    overflow-y: auto;
+  width: 250px;
+  background: #f3f3f3;
+  padding: 20px;
 }
-
-.logo img {
-    width: 100%;
-    height: auto;
+.sidebar .logo {
+  width: 100%;
+  margin-bottom: 20px;
 }
-
-.logo h1 {
-    font-size: 1.5em;
-    text-align: center;
-    margin: 10px 0;
+.sidebar ul {
+  list-style: none;
+  padding: 0;
 }
-
-nav ul {
-    list-style: none;
+.sidebar li {
+  cursor: pointer;
+  margin: 10px 0;
 }
-
-nav ul li {
-    margin: 10px 0;
+#visitorCounter {
+  margin-top: 20px;
+  font-weight: bold;
 }
-
-nav ul li a {
-    text-decoration: none;
-    color: #333;
-    display: block;
-    padding: 10px;
-    border-radius: 5px;
+main {
+  flex-grow: 1;
+  padding: 20px;
 }
-
-nav ul li a:hover, nav ul li a.active {
-    background-color: #ddd;
+.page {
+  display: none;
 }
-
-.visitor-counter {
-    margin-top: 20px;
-    text-align: center;
-}
-
-/* Main Content */
-.main-content {
-    margin-left: 270px;
-    padding: 20px;
-    flex: 1;
-}
-
-section {
-    display: none;
-}
-
-section:target {
-    display: block;
-}
-
-#gallery:target ~ #ecology,
-#gallery:target ~ #game,
-#gallery:target ~ #stories,
-#gallery:target ~ #subscription {
-    display: none;
-}
-
-/* Gallery */
-.gallery {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-.gallery img {
-    width: 250px; /* Adjust based on your logo size */
-    height: auto;
-    border-radius: 5px;
-}
-
-/* Word Search */
-#word-search {
-    display: flex;
-    gap: 20px;
-}
-
-#puzzle {
-    font-family: monospace;
-    FONT-SIZE: 1.2em;
-    line-height: 1.5;
-}
-
-#puzzle span {
-    display: inline-block;
-    width: 30px;
-    height: 30px;
-    text-align: center;
-    cursor: pointer;
-}
-
-#puzzle span.selected {
-    background-color: #aaffaa;
-}
-
-#word-list ul {
-    list-style: none;
-}
-
-#word-list li.found {
-    text-decoration: line-through;
-    color: green;
-}
-
-/* Subscription */
-.subscription-form {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-
-.subscription-form input {
-    padding: 5px;
-    font-size: 1em;
-}
-
-.subscription-form button {
-    padding: 5px 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-.subscription-form button:hover {
-    background-color: #45a049;
-}
-
-#subscriber-list {
-    list-style: none;
+.page.active {
+  display: block;
 }

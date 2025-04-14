@@ -1,0 +1,22 @@
+body {
+  font-family: sans-serif;
+  text-align: center;
+}
+#puzzle {
+  display: grid;
+  grid-template-columns: repeat(10, 30px);
+  gap: 5px;
+  justify-content: center;
+  margin-top: 20px;
+}
+#puzzle div {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #aaa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#wordsList {
+  list-style: none;
+}

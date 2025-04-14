@@ -1,121 +1,42 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>泰國蝦的第一個家</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shrimp's First Home</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <script src="firebase-visitor.js" defer></script>
+  <script src="script.js" defer></script>
 </head>
 <body>
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="logo">
-            <img src="logo.png" alt="Shrimp's First Home Logo">
-            <h1>泰國蝦的第一個家</h1>
-        </div>
-        <nav>
-            <ul>
-                <li><a href="#gallery" class="active">蝦蝦圖展示區</a></li>
-                <li><a href="#ecology">泰國蝦生態解說</a></li>
-                <li><a href="#game" onclick="regeneratePuzzle()">小遊戲試玩</a></li>
-                <li><a href="#stories">小妖怪故事集</a></li>
-                <li><a href="#subscription">訂閱名單</a></li>
-            </ul>
-        </nav>
-        <div class="visitor-counter">
-            <p>參訪人數: <span id="visitor-count">0</span></p>
-        </div>
-    </div>
-
-    <!-- Main Content -->
-    <div class="main-content">
-        <!-- Gallery Section -->
-        <section id="gallery">
-            <h2>蝦蝦圖展示區</h2>
-            <div class="gallery">
-                <img src="logo.png" alt="Shrimp 1">
-                <img src="logo.png" alt="Shrimp 2">
-                <img src="logo.png" alt="Shrimp 3">
-            </div>
-        </section>
-
-        <!-- Ecology Section -->
-        <section id="ecology">
-            <h2>泰國蝦生態解說</h2>
-            <p>此處暫時留空，之後會填入泰國蝦的生態解說內容。</p>
-        </section>
-
-        <!-- Game Section -->
-        <section id="game">
-            <h2>小遊戲試玩 - 英文字謎</h2>
-            <div id="word-search">
-                <div id="puzzle"></div>
-                <div id="word-list">
-                    <h3>要找的單字:</h3>
-                    <ul id="words-to-find"></ul>
-                </div>
-            </div>
-            <div class="game-buttons">
-                <button onclick="regeneratePuzzle()">重新產生謎題</button>
-                <button onclick="showSolution()">公布解答</button>
-            </div>
-        </section>
-
-        <!-- Stories Section -->
-        <section id="stories">
-            <h2>小妖怪故事集</h2>
-            <div class="story">
-                <h3>黑暗裡的小妖怪{03暗黑巨手魔}</h3>
-                <p>
-                    當你的房間，燈是關的，可能從遠處看到一雙巨大的手，那有可能就是「03暗黑巨手魔」。<br>
-                    你可能會覺得那是別人的手影，但是遇見那種妖怪可要小心了，一般人可能會嚇到不敢回房間，或是當場昏倒吧，但是只要不接近那裡，或是勇敢去房間開燈，祂就會自動消失了。
-                </p>
-                <p class="ratings">
-                    評分：<br>
-                    稀有度：82%  危險度：75%  恐怖度：100%
-                </p>
-                <img src="monster-story-1.png" alt="03暗黑巨手魔" class="story-image">
-            </div>
-        </section>
-
-        <!-- Subscription Section -->
-        <section id="subscription">
-            <h2>訂閱名單</h2>
-            <div class="subscription-form">
-                <input type="text" id="subscriber-name" placeholder="輸入您的名稱">
-                <input type="password" id="password" placeholder="輸入密碼 (1125)">
-                <button onclick="addSubscriber()">新增</button>
-                <button onclick="deleteSubscriber()">刪除</button>
-            </div>
-            <h3>訂閱者名單:</h3>
-            <ul id="subscriber-list"></ul>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyB2RNGWJ0VAgDyWRG84CuE_EHktd9ThkXI",
-    authDomain: "shrimp-s-first-home.firebaseapp.com",
-    databaseURL: "https://shrimp-s-first-home-default-rtdb.firebaseio.com",
-    projectId: "shrimp-s-first-home",
-    storageBucket: "shrimp-s-first-home.firebasestorage.app",
-    messagingSenderId: "674906578968",
-    appId: "1:674906578968:web:e7bbdd5261caacd201636d",
-    measurementId: "G-MNCCYWXR83"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
+  <div class="container">
+    <aside class="sidebar">
+      <img src="logo_updated.png" alt="Logo" class="logo"/>
+      <nav>
+        <ul>
+          <li onclick="navigate('gallery')">蝦蝦圖展示區</li>
+          <li onclick="navigate('ecosystem')">泰國蝦生態解說</li>
+          <li onclick="navigateToGame()">小遊戲試玩</li>
+          <li onclick="navigate('stories')">小妖怪故事集</li>
+          <li onclick="navigate('subscribe')">訂閱名單</li>
+        </ul>
+      </nav>
+      <div id="visitorCounter">參訪人數：--</div>
+    </aside>
+    <main id="content">
+      <section id="gallery" class="page">這是蝦蝦圖展示區</section>
+      <section id="ecosystem" class="page">這是泰國蝦生態解說</section>
+      <section id="stories" class="page">這是小妖怪故事集</section>
+      <section id="subscribe" class="page">
+        <h2>訂閱名單</h2>
+        <input type="text" id="subscriberName" placeholder="輸入名稱" />
+        <input type="password" id="adminPassword" placeholder="管理者密碼" />
+        <button onclick="addSubscriber()">訂閱</button>
+        <ul id="subscriberList"></ul>
+      </section>
+    </main>
+  </div>
 </body>
 </html>
