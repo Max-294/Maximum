@@ -1,36 +1,71 @@
 // Initialize Firebase
 const firebaseConfig = {
-  apiKey: "AIzaSyB2RNGWJ0VAgDyWRG84CuE_EHktd9ThkXI",
-  authDomain: "shrimp-s-first-home.firebaseapp.com",
-  databaseURL: "https://shrimp-s-first-home-default-rtdb.firebaseio.com",
-  projectId: "shrimp-s-first-home",
-  storageBucket: "shrimp-s-first-home.firebasestorage.app",
-  messagingSenderId: "674906578968",
-  appId: "1:674906578968:web:e7bbdd5261caacd201636d",
-  measurementId: "G-MNCCYWXR83"
+    apiKey: "your-api-key",
+    authDomain: "your-project-id.firebaseapp.com",
+    databaseURL: "https://your-project-id-default-rtdb.firebaseio.com",
+    projectId: "your-project-id",
+    storageBucket: "your-project-id.appspot.com",
+    messagingSenderId: "your-sender-id",
+    appId: "your-app-id"
 };
 
 // Initialize Firebase app
-firebase.initializeApp(firebaseConfig);
+try {
+    firebase.initializeApp(firebaseConfig);
+    console.log("Firebase initialized successfully");
+} catch (error) {
+    console.error("Firebase initialization failed:", error);
+}
 
 // Reference to the Realtime Database
-const db = firebase.database();
-const visitorRef = db.ref('visitorCount');
+let db, visitorRef;
+try {
+    db = firebase.database();
+    visitorRef = db.ref('visitorCount');
+} catch (error) {
+    console.error("Error setting up Firebase database reference:", error);
+}
 
 // Visitor Counter
-visitorRef.once('value', (snapshot) => {
-    let visitorCount = snapshot.val() || 0;
-    visitorCount++;
-    visitorRef.set(visitorCount);
-    document.getElementById('visitor-count').textContent = visitorCount;
-}, (error) => {
-    console.error('Error fetching visitor count:', error);
-    // Fallback to local counter if Firebase fails
-    let visitorCount = localStorage.getItem('visitorCount') || 0;
-    visitorCount++;
-    localStorage.setItem('visitorCount', visitorCount);
-    document.getElementById('visitor-count').textContent = visitorCount;
-});
+function updateVisitorCount() {
+    const visitorCountElement = document.getElementById('visitor-count');
+    if (!visitorCountElement) {
+        console.error("Visitor count element not found!");
+        return;
+    }
+
+    // Fallback counter using localStorage
+    let localVisitorCount = parseInt(localStorage.getItem('visitorCount')) || 0;
+
+    if (visitorRef) {
+        visitorRef.once('value', (snapshot) => {
+            let visitorCount = snapshot.val() || 0;
+            visitorCount++;
+            visitorRef.set(visitorCount).then(() => {
+                visitorCountElement.textContent = visitorCount;
+                console.log("Visitor count updated in Firebase:", visitorCount);
+            }).catch((error) => {
+                console.error("Error updating visitor count in Firebase:", error);
+                // Fallback to local counter
+                localVisitorCount++;
+                localStorage.setItem('visitorCount', localVisitorCount);
+                visitorCountElement.textContent = localVisitorCount;
+            });
+        }, (error) => {
+            console.error("Error fetching visitor count from Firebase:", error);
+            // Fallback to local counter
+            localVisitorCount++;
+            localStorage.setItem('visitorCount', localVisitorCount);
+            visitorCountElement.textContent = localVisitorCount;
+        });
+    } else {
+        // If Firebase isn't available, use local counter
+        localVisitorCount++;
+        localStorage.setItem('visitorCount', localVisitorCount);
+        visitorCountElement.textContent = localVisitorCount;
+        console.warn("Firebase not available, using local counter:", localVisitorCount);
+    }
+}
 
 // Word Search Game
 const fixedWords = ["SHRIMP", "THAI", "HOME", "WATER", "TANK", "FISH", "SEA", "FOOD", "SHELL", "CLAW"];
@@ -39,10 +74,14 @@ let selectedCells = [];
 let foundWords = new Set();
 let wordPositions = [];
 
-// Generate a New Puzzle
 function generatePuzzle() {
     const puzzleDiv = document.getElementById('puzzle');
     const wordList = document.getElementById('words-to-find');
+    if (!puzzleDiv || !wordList) {
+        console.error("Puzzle or word list element not found!");
+        return;
+    }
+
     puzzleDiv.innerHTML = '';
     wordList.innerHTML = '';
     selectedCells = [];
@@ -172,12 +211,10 @@ function generatePuzzle() {
     });
 }
 
-// Regenerate Puzzle (called when clicking the link or button)
 function regeneratePuzzle() {
     generatePuzzle();
 }
 
-// Show Solution
 function showSolution() {
     document.querySelectorAll('#puzzle span').forEach(cell => {
         cell.classList.remove('selected', 'solution');
@@ -192,7 +229,6 @@ function showSolution() {
         });
     });
 
-    // Mark all words as found
     fixedWords.forEach(word => {
         foundWords.add(word);
         const wordItem = document.querySelector(`#words-to-find li[data-word="${word}"]`);
@@ -202,13 +238,11 @@ function showSolution() {
     });
 }
 
-// Select Cells for Word Search
 function selectCell(cell) {
     const row = parseInt(cell.dataset.row);
     const col = parseInt(cell.dataset.col);
 
     if (selectedCells.some(c => c.row === row && c.col === col)) {
-        // Deselect if already selected
         selectedCells = selectedCells.filter(c => !(c.row === row && c.col === col));
         cell.classList.remove('selected');
     } else {
@@ -219,12 +253,120 @@ function selectCell(cell) {
     checkWord();
 }
 
-// Check if Selected Cells Form a Word
 function checkWord() {
     if (selectedCells.length < 3) return;
 
     let word = '';
 
-    // Check horizontal
     const sortedByCol = [...selectedCells].sort((a, b) => a.col - b.col);
-    if (sortedByCol.every((c, i) => i === 0 || c.col === sortedByCol[i-1].col + 1)
+    if (sortedByCol.every((c, i) => i === 0 || c.col === sortedByCol[i-1].col + 1) && sortedByCol.every(c => c.row === sortedByCol[0].row)) {
+        word = sortedByCol.map(c => puzzleData[c.row][c.col]).join('');
+    }
+
+    const sortedByRow = [...selectedCells].sort((a, b) => a.row - b.row);
+    if (sortedByRow.every((c, i) => i === 0 || c.row === sortedByRow[i-1].row + 1) && sortedByRow.every(c => c.col === sortedByRow[0].col)) {
+        word = sortedByRow.map(c => puzzleData[c.row][c.col]).join('');
+    }
+
+    const sortedByRowCol = [...selectedCells].sort((a, b) => a.row - b.row || a.col - b.col);
+    if (sortedByRowCol.every((c, i) => i === 0 || (c.row === sortedByRowCol[i-1].row + 1 && c.col === sortedByRowCol[i-1].col + 1))) {
+        word = sortedByRowCol.map(c => puzzleData[c.row][c.col]).join('');
+    }
+
+    const sortedByRowColDesc = [...selectedCells].sort((a, b) => a.row - b.row || b.col - a.col);
+    if (sortedByRowColDesc.every((c, i) => i === 0 || (c.row === sortedByRowColDesc[i-1].row + 1 && c.col === sortedByRowColDesc[i-1].col - 1))) {
+        word = sortedByRowColDesc.map(c => puzzleData[c.row][c.col]).join('');
+    }
+
+    if (fixedWords.includes(word) && !foundWords.has(word)) {
+        foundWords.add(word);
+        document.querySelector(`#words-to-find li[data-word="${word}"]`).classList.add('found');
+        selectedCells = [];
+        document.querySelectorAll('#puzzle span').forEach(cell => cell.classList.remove('selected'));
+    }
+}
+
+// Subscription List
+let subscribers = JSON.parse(localStorage.getItem('subscribers')) || [];
+
+function renderSubscribers() {
+    const list = document.getElementById('subscriber-list');
+    if (!list) {
+        console.error("Subscriber list element not found!");
+        return;
+    }
+    list.innerHTML = '';
+    subscribers.forEach((name, index) => {
+        const li = document.createElement('li');
+        li.textContent = `${index + 1}. ${name}`; // Only display the name, not the password
+        list.appendChild(li);
+    });
+}
+
+function addSubscriber() {
+    const nameInput = document.getElementById('subscriber-name');
+    const passwordInput = document.getElementById('password');
+
+    if (!nameInput || !passwordInput) {
+        console.error("Input elements not found!");
+        return;
+    }
+
+    const name = nameInput.value.trim();
+    const password = passwordInput.value;
+
+    if (password !== '1125') {
+        alert('密碼錯誤！');
+        return;
+    }
+
+    if (name === '') {
+        alert('請輸入名稱！');
+        return;
+    }
+
+    subscribers.push(name);
+    localStorage.setItem('subscribers', JSON.stringify(subscribers));
+    renderSubscribers();
+    alert(`成功新增訂閱者: ${name}`); // Do not display the password in the alert
+    nameInput.value = '';
+    passwordInput.value = '';
+}
+
+function deleteSubscriber() {
+    const nameInput = document.getElementById('subscriber-name');
+    const passwordInput = document.getElementById('password');
+
+    if (!nameInput || !passwordInput) {
+        console.error("Input elements not found!");
+        return;
+    }
+
+    const name = nameInput.value.trim();
+    const password = passwordInput.value;
+
+    if (password !== '1125') {
+        alert('密碼錯誤！');
+        return;
+    }
+
+    const index = subscribers.indexOf(name);
+    if (index === -1) {
+        alert('找不到該名稱！');
+        return;
+    }
+
+    subscribers.splice(index, 1);
+    localStorage.setItem('subscribers', JSON.stringify(subscribers));
+    renderSubscribers();
+    alert(`成功刪除訂閱者: ${name}`); // Do not display the password in the alert
+    nameInput.value = '';
+    passwordInput.value = '';
+}
+
+// Initialize
+window.onload = () => {
+    updateVisitorCount();
+    generatePuzzle();
+    renderSubscribers();
+};

@@ -72,11 +72,13 @@ section:target {
     display: block;
 }
 
-#gallery:target ~ #ecology,
-#gallery:target ~ #game,
-#gallery:target ~ #stories,
-#gallery:target ~ #subscription {
+section:target ~ section {
     display: none;
+}
+
+/* Ensure the first section (gallery) is visible by default */
+#gallery {
+    display: block;
 }
 
 /* Gallery */
@@ -87,7 +89,7 @@ section:target {
 }
 
 .gallery img {
-    width: 250px; /* Adjust based on your logo size */
+    width: 250px;
     height: auto;
     border-radius: 5px;
 }
@@ -117,7 +119,7 @@ section:target {
 }
 
 #puzzle span.solution {
-    background-color: #ffaaaa; /* Highlight for solution */
+    background-color: #ffaaaa;
 }
 
 #word-list ul {
