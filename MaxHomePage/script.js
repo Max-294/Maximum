@@ -246,7 +246,7 @@ function addSubscriber() {
     const name = nameInput.value.trim();
     const password = passwordInput.value;
 
-    if (password !== '1125') {
+    if (password !== '0121') {
         alert('密碼錯誤！');
         return;
     }
@@ -276,7 +276,7 @@ function deleteSubscriber() {
     const name = nameInput.value.trim();
     const password = passwordInput.value;
 
-    if (password !== '1125') {
+    if (password !== '0121') {
         alert('密碼錯誤！');
         return;
     }
