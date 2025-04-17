@@ -229,7 +229,7 @@ function renderSubscribers() {
     list.innerHTML = '';
     subscribers.forEach((name, index) => {
         const li = document.createElement('li');
-        li.textContent = `${index + 1}. ${name}`; // Only display the name, not the password
+        li.textContent = `${index + 1}. ${name}`;
         list.appendChild(li);
     });
 }

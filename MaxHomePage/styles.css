@@ -72,12 +72,13 @@ section:target {
     display: block;
 }
 
+/* Ensure only the targeted section is visible */
 section:target ~ section {
     display: none;
 }
 
-/* Ensure the first section (gallery) is visible by default */
-#gallery {
+/* Default to showing the gallery section if no section is targeted */
+.main-content:not(:has(section:target)) #gallery {
     display: block;
 }
 
