@@ -64,20 +64,22 @@ nav ul li a:hover, nav ul li a.active {
     flex: 1;
 }
 
-section {
+/* Hide all sections by default */
+.main-content section {
     display: none;
 }
 
-section:target {
+/* Show the targeted section */
+.main-content section:target {
     display: block;
 }
 
-/* Ensure only the targeted section is visible */
-section:target ~ section {
+/* Hide all sections when another section is targeted */
+.main-content section:target ~ section {
     display: none;
 }
 
-/* Default to showing the gallery section if no section is targeted */
+/* Show the gallery section by default if no section is targeted */
 .main-content:not(:has(section:target)) #gallery {
     display: block;
 }
@@ -153,53 +155,4 @@ section:target ~ section {
 }
 
 /* Stories */
-.story {
-    margin-bottom: 20px;
-}
-
-.story h3 {
-    margin-bottom: 10px;
-}
-
-.story p {
-    margin-bottom: 10px;
-}
-
-.ratings {
-    font-style: italic;
-}
-
-.story-image {
-    max-width: 100%;
-    height: auto;
-    margin-top: 10px;
-    border-radius: 5px;
-}
-
-/* Subscription */
-.subscription-form {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-
-.subscription-form input {
-    padding: 5px;
-    font-size: 1em;
-}
-
-.subscription-form button {
-    padding: 5px 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-.subscription-form button:hover {
-    background-color: #45a049;
-}
-
-#subscriber-list {
-    list-style: none;
-}
+.story
